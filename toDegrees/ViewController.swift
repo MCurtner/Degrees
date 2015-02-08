@@ -224,13 +224,7 @@ class ViewController: UIViewController {
         var currentLocation : CGPoint = CGPointMake(-location.x+translation.x, -location.y+translation.y)
         //recognizer.setTranslation(CGPointZero, inView: self.view)
         
-    
-        
-        
-        
-        
-        
-        
+
         if currentLocation.y > 0.0 {
             
             //Convert
