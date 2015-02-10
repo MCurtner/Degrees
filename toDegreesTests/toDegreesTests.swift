@@ -28,20 +28,20 @@ class toDegreesTests: XCTestCase {
         }
     }
     
-    func testFahrenheitToCelsius() {
-        let vc = ViewController()
-        
-        XCTAssertEqual(vc.convertFahrenheitToCelsius(fahrenheit: "32"), Float(0.0), "32 F is equal to 0 C")
-        
-//        XCTAssertEqual(Float(31.1), vc.convertFahrenheitToCelsius(fahrenheit: "88"), "Should Pass")
-//        XCTAssertEqual(Float(-9), vc.convertFahrenheitToCelsius(fahrenheit: "15"), "Should Pass")
-//        XCTAssertEqual(Float(18), vc.convertFahrenheitToCelsius(fahrenheit: "64"), "Should Pass")
+//    func testFahrenheitToCelsius() {
+//        let vc = ViewController()
 //        
-//        XCTAssertNotEqual(Float(32), vc.convertFahrenheitToCelsius(fahrenheit: "45"), "Should Fail")
-//        XCTAssertNotEqual(Float(-10), vc.convertFahrenheitToCelsius(fahrenheit: "16"), "Should Fail")
-//        XCTAssertNotEqual(Float(-15), vc.convertFahrenheitToCelsius(fahrenheit: "23"), "Should Fail")
-//        XCTAssertNotEqual(Float(37), vc.convertFahrenheitToCelsius(fahrenheit: "101"), "Should Fail")
-    }
+//        XCTAssertEqual(vc.convertFahrenheitToCelsius(fahrenheit: "32"), Float(0.0), "32 F is equal to 0 C")
+//        
+////        XCTAssertEqual(Float(31.1), vc.convertFahrenheitToCelsius(fahrenheit: "88"), "Should Pass")
+////        XCTAssertEqual(Float(-9), vc.convertFahrenheitToCelsius(fahrenheit: "15"), "Should Pass")
+////        XCTAssertEqual(Float(18), vc.convertFahrenheitToCelsius(fahrenheit: "64"), "Should Pass")
+////        
+////        XCTAssertNotEqual(Float(32), vc.convertFahrenheitToCelsius(fahrenheit: "45"), "Should Fail")
+////        XCTAssertNotEqual(Float(-10), vc.convertFahrenheitToCelsius(fahrenheit: "16"), "Should Fail")
+////        XCTAssertNotEqual(Float(-15), vc.convertFahrenheitToCelsius(fahrenheit: "23"), "Should Fail")
+////        XCTAssertNotEqual(Float(37), vc.convertFahrenheitToCelsius(fahrenheit: "101"), "Should Fail")
+//    }
     
 //    func testCelsiusToFahrenheit() {
 //        let vc = ViewController()

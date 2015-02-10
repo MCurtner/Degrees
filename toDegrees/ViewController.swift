@@ -9,18 +9,15 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    //@IBOutlet weak var fahrenheitImageView: UIImageView!
-    //@IBOutlet weak var celsiusImageView: UIImageView!
-    
-    //@IBOutlet weak var fahrenheitLabel: UILabel!
-    //@IBOutlet weak var celsiusLabel: UILabel!
-    
-    
     var celsiusLabel: UILabel! = UILabel()
     var fahrenheitLabel: UILabel! = UILabel()
+    var swipeToClearLabel: UILabel! = UILabel()
     
-    var location : CGPoint = CGPointZero
+    var useFont = UIFont(name: "HelveticaNeue-Thin", size: 50)
+    var textColor = UIColor.whiteColor()
+
+    
+
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
@@ -28,74 +25,67 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Create the UIImageViews
         let celsiusImageView = UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width/2, height: self.view.frame.size.height))
         let fahrenheitImageView = UIImageView(frame: CGRect(x: self.view.frame.size.width/2, y: 0.0, width: self.view.frame.size.width/2, height: self.view.frame.size.height))
-        
-        celsiusLabel =  UILabel(frame: CGRectMake(5.0, celsiusImageView.frame.height/2, celsiusImageView.frame.width - 10, 50))
-        fahrenheitLabel = UILabel(frame: CGRectMake(fahrenheitImageView.frame.size.width + 10, fahrenheitImageView.frame.height/2, fahrenheitImageView.frame.size.width - 10, 50))
+        let swipeImageView = UIImageView(frame: CGRect(x: 0.0, y: self.view.frame.height / 1.1 , width: self.view.frame.size.width, height: 50.0))
 
-        celsiusImageView.backgroundColor = UIColor.blueColor()
-        fahrenheitImageView.backgroundColor = UIColor.redColor()
-        
-        fahrenheitLabel.text = "32"
-        celsiusLabel.text = "0"
-        
-        celsiusLabel.textAlignment = NSTextAlignment.Center
-        fahrenheitLabel.textAlignment = NSTextAlignment.Center
-        
-        celsiusLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 50)
-        fahrenheitLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 50)
-        
-        celsiusLabel.textColor = UIColor.whiteColor()
-        fahrenheitLabel.textColor = UIColor.whiteColor()
-        
-        view.addSubview(celsiusImageView)
-        view.addSubview(fahrenheitImageView)
-        view.addSubview(celsiusLabel)
-        view.addSubview(fahrenheitLabel)
-        
         
         //Enable user interaction for Image Views
         fahrenheitImageView.userInteractionEnabled = true
         celsiusImageView.userInteractionEnabled = true
+        swipeImageView.userInteractionEnabled = true
+        
+        //Create the labels
+        celsiusLabel =  UILabel(frame: CGRectMake(5.0, celsiusImageView.frame.height/2, celsiusImageView.frame.width - 10, 50))
+        fahrenheitLabel = UILabel(frame: CGRectMake(fahrenheitImageView.frame.size.width + 10, fahrenheitImageView.frame.height/2, fahrenheitImageView.frame.size.width - 10, 50))
+        swipeToClearLabel = UILabel(frame: CGRectMake(5.0, swipeImageView.frame.size.height/2, swipeImageView.frame.size.width/2, swipeImageView.frame.size.height/2))
+        
+        //Set the background colors
+        celsiusImageView.backgroundColor = UIColor.blueColor()
+        fahrenheitImageView.backgroundColor = UIColor.redColor()
+        swipeImageView.backgroundColor = UIColor.blackColor()
+        
+        celsiusLabel.text = "0"
+        celsiusLabel.textAlignment = NSTextAlignment.Center
+        celsiusLabel.font = useFont
+        celsiusLabel.textColor = textColor
+        
+        fahrenheitLabel.text = "32"
+        fahrenheitLabel.textAlignment = NSTextAlignment.Center
+        fahrenheitLabel.font = useFont
+        fahrenheitLabel.textColor = textColor
+        
+        swipeToClearLabel.text = "Swipe to Clear"
+        swipeToClearLabel.textAlignment = NSTextAlignment.Center
+        swipeToClearLabel.font = useFont
+        swipeToClearLabel.textColor = textColor
         
         
-        
-        //Fahrenheit gesture recognizers
-        let upSelector: Selector = "swipeUpFahrenheit:"
-        let upSwipe = UISwipeGestureRecognizer(target: self, action: upSelector)
-        upSwipe.direction = UISwipeGestureRecognizerDirection.Up
-        fahrenheitImageView.addGestureRecognizer(upSwipe)
-        
-        let downSelector: Selector = "swipeDownFahrenheit:"
-        let downSwipe = UISwipeGestureRecognizer(target: self, action: downSelector)
-        downSwipe.direction = UISwipeGestureRecognizerDirection.Down
-        fahrenheitImageView.addGestureRecognizer(downSwipe)
-        
-        
-        //Celsius gesture recognizers
-        let upSelectorCelsius: Selector = "swipeUpCelsius:"
-        let upSwipeCelsius = UISwipeGestureRecognizer(target: self, action: upSelectorCelsius)
-        upSwipeCelsius.direction = UISwipeGestureRecognizerDirection.Up
-        celsiusImageView.addGestureRecognizer(upSwipeCelsius)
-
-        let downSelectorCelsius: Selector = "swipeDownCelsius:"
-        let downSwipeCelsius = UISwipeGestureRecognizer(target: self, action: downSelectorCelsius)
-        downSwipeCelsius.direction = UISwipeGestureRecognizerDirection.Down
-        celsiusImageView.addGestureRecognizer(downSwipeCelsius)
+        view.addSubview(celsiusImageView)
+        view.addSubview(fahrenheitImageView)
+        view.addSubview(swipeImageView)
+        view.addSubview(celsiusLabel)
+        view.addSubview(fahrenheitLabel)
+        swipeImageView.addSubview(swipeToClearLabel)
         
         //Reset gesture recognizer
         let swipeSelector: Selector = "swipeToReset:"
         let swipeRight = UISwipeGestureRecognizer(target: self, action: swipeSelector)
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        view.addGestureRecognizer(swipeRight)
+        swipeImageView.addGestureRecognizer(swipeRight)
         
-        let panGesture:Selector = "handlePan:"
-        let panUp = UIPanGestureRecognizer(target: self, action: panGesture)
-        fahrenheitImageView.addGestureRecognizer(panUp)
+        //Pan Gesture
+        let panFahrenGesture:Selector = "setFahrenheitTemp:"
+        let panFahrenUp = UIPanGestureRecognizer(target: self, action: panFahrenGesture)
+        fahrenheitImageView.addGestureRecognizer(panFahrenUp)
+ 
+        let panCelsiusGesture:Selector = "setCelsiusTemp:"
+        let panCelsiusUp = UIPanGestureRecognizer(target: self, action: panCelsiusGesture)
+        celsiusImageView.addGestureRecognizer(panCelsiusUp)
+        
     }
     
-
     
     //MARK: Temperature Conversion Methods
     func convertFahrenheitToCelsius(#fahrenheit: String) -> Float {
@@ -125,107 +115,21 @@ class ViewController: UIViewController {
     }
     
 
-    
-    //MARK: Swipe Up/Down Fahrenheit Gesture Methods
-    func swipeUpFahrenheit(sender: AnyObject) {
-        println("Swipe up called")
-        
-        //Convert
-        var currentFahrValue = convertStringToFloat(tempatureLblValue: fahrenheitLabel.text!)
-        
-        //Round the Value
-        currentFahrValue = round(currentFahrValue)
-        
-        //Add one to value and
-        var increasedValue = (currentFahrValue + 1)
-        
-        //Display Fahrenheit value
-        fahrenheitLabel.text = convertToStringValue(increasedValue)
-        
-        //Convert Fahrenheit to Celsius
-        var celsiusValue = convertFahrenheitToCelsius(fahrenheit: fahrenheitLabel.text!)
-        
-        //Display celsius value
-        celsiusLabel.text = convertToStringValue(celsiusValue)
-    }
-    
-    func swipeDownFahrenheit(sender: AnyObject) {
-        println("Swipe down called")
-       
-        //Convert
-        var currentFahrValue = convertStringToFloat(tempatureLblValue: fahrenheitLabel.text!)
-        
-        //Round the value
-        currentFahrValue = round(currentFahrValue)
-        
-        //Add one to value and display Fahrenheit value
-        fahrenheitLabel.text = convertToStringValue(currentFahrValue - 1)
-        
-        //Convert Fahrenheit to Celsius
-        var celsiusValue = convertFahrenheitToCelsius(fahrenheit: fahrenheitLabel.text!)
-        
-        //Display celsius value
-        celsiusLabel.text = convertToStringValue(celsiusValue)
-    }
-    
-    //MARK: Swipe Up/Down Celsius Gesture Methods
-    func swipeUpCelsius(sender: AnyObject) {
-        println("Swipe up called")
-        
-        //Convert
-        var currentCelsiusValue = convertStringToFloat(tempatureLblValue: celsiusLabel.text!)
-        
-        //Round the value
-        currentCelsiusValue = round(currentCelsiusValue)
-        
-        //Add one to value and
-        var increasedValue = (currentCelsiusValue + 1)
-        
-        //Display Fahrenheit value
-        celsiusLabel.text = convertToStringValue(increasedValue)
-        
-        //Convert Celsius to Fahrenheit
-        var fahrenheitValue = convertCelsiusToFahrenheit(celsius: celsiusLabel.text!)
-        
-        //Display celsius value
-        fahrenheitLabel.text = convertToStringValue(fahrenheitValue)
-    }
-    
-    func swipeDownCelsius(sender: AnyObject) {
-        println("Swipe up called")
-        
-        //Convert
-        var currentCelsiusValue = convertStringToFloat(tempatureLblValue: celsiusLabel.text!)
-        
-        //Round the value
-        currentCelsiusValue = round(currentCelsiusValue)
-        
-        //Add one to value and
-        var increasedValue = (currentCelsiusValue - 1)
-        
-        //Display Fahrenheit value
-        celsiusLabel.text = convertToStringValue(increasedValue)
-        
-        //Convert Celsius to Fahrenheit
-        var fahrenheitValue = convertCelsiusToFahrenheit(celsius: celsiusLabel.text!)
-        
-        //Display celsius value
-        fahrenheitLabel.text = convertToStringValue(fahrenheitValue)
-    }
-    
+    //Gesture Methods
     func swipeToReset(sender: AnyObject) {
         fahrenheitLabel.text = "32"
         celsiusLabel.text = "0"
     }
     
     
-    func handlePan(recognizer:UIPanGestureRecognizer) {
-        let translation = recognizer.translationInView(self.view)
-        var currentLocation : CGPoint = CGPointMake(-location.x+translation.x, -location.y+translation.y)
-        //recognizer.setTranslation(CGPointZero, inView: self.view)
-        
+    func setFahrenheitTemp(recognizer:UIPanGestureRecognizer) {
 
-        if currentLocation.y > 0.0 {
+        var translation: CGPoint = recognizer.translationInView(recognizer.view!)
+        
+        if (translation.y < -20 || translation.y > 20) {
+            var sign: Int = translation.y > 0 ? -1 : 1
+            
+            recognizer.setTranslation(CGPointMake(0, 0), inView: self.view)
             
             //Convert
             var currentFahrValue = convertStringToFloat(tempatureLblValue: fahrenheitLabel.text!)
@@ -234,7 +138,7 @@ class ViewController: UIViewController {
             currentFahrValue = round(currentFahrValue)
             
             //Add one to value and
-            var increasedValue = (currentFahrValue - 1)
+            var increasedValue = (currentFahrValue + Float(sign * 1))
             
             //Display Fahrenheit value
             fahrenheitLabel.text = convertToStringValue(increasedValue)
@@ -245,93 +149,45 @@ class ViewController: UIViewController {
             //Display celsius value
             celsiusLabel.text = convertToStringValue(celsiusValue)
         }
-        
-        if currentLocation.y <= 0.0 {
-            //Convert
-            var currentFahrValue = convertStringToFloat(tempatureLblValue: fahrenheitLabel.text!)
-            
-            //Round the Value
-            currentFahrValue = round(currentFahrValue)
-            
-            //Add one to value and
-            var increasedValue = (currentFahrValue + 1)
-            
-            //Display Fahrenheit value
-            fahrenheitLabel.text = convertToStringValue(increasedValue)
-            
-            //Convert Fahrenheit to Celsius
-            var celsiusValue = convertFahrenheitToCelsius(fahrenheit: fahrenheitLabel.text!)
-            
-            //Display celsius value
-            celsiusLabel.text = convertToStringValue(celsiusValue)
-        }
-        
-        
-        println("\(currentLocation.y)")
-    }
-
-    
-    
-    
-    
-    
-    /*
-    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
-        let translation = recognizer.translationInView(self.view)
-        var currentLocation : CGPoint = CGPointMake(-location.x+translation.x, -location.y+translation.y)
-        recognizer.setTranslation(CGPointZero, inView: self.view)
-
-        if currentLocation.y >= 0.0 {
-            
-            //Convert
-            var currentFahrValue = convertStringToFloat(tempatureLblValue: fahrenheitLabel.text!)
-            
-            //Round the Value
-            currentFahrValue = round(currentFahrValue)
-            
-            //Add one to value and
-            var increasedValue = (currentFahrValue - 1)
-            
-            //Display Fahrenheit value
-            fahrenheitLabel.text = convertToStringValue(increasedValue)
-            
-            //Convert Fahrenheit to Celsius
-            var celsiusValue = convertFahrenheitToCelsius(fahrenheit: fahrenheitLabel.text!)
-            
-            //Display celsius value
-            celsiusLabel.text = convertToStringValue(celsiusValue)
-        }
-        
-        if currentLocation.y <= 0.0 {
-            //Convert
-            var currentFahrValue = convertStringToFloat(tempatureLblValue: fahrenheitLabel.text!)
-            
-            //Round the Value
-            currentFahrValue = round(currentFahrValue)
-            
-            //Add one to value and
-            var increasedValue = (currentFahrValue + 1)
-            
-            //Display Fahrenheit value
-            fahrenheitLabel.text = convertToStringValue(increasedValue)
-            
-            //Convert Fahrenheit to Celsius
-            var celsiusValue = convertFahrenheitToCelsius(fahrenheit: fahrenheitLabel.text!)
-            
-            //Display celsius value
-            celsiusLabel.text = convertToStringValue(celsiusValue)
-        }
-        
-        
-        println("\(currentLocation.y)")
     }
     
-    */
+    
+    func setCelsiusTemp(recognizer:UIPanGestureRecognizer) {
+        
+        var translation: CGPoint = recognizer.translationInView(recognizer.view!)
+        
+        if (translation.y < -20 || translation.y > 20) {
+            var sign: Int = translation.y > 0 ? -1 : 1
+            
+            recognizer.setTranslation(CGPointMake(0, 0), inView: self.view)
+            
+            //Convert
+            var currentCelsiusValue = convertStringToFloat(tempatureLblValue: celsiusLabel.text!)
+            
+            //Round the value
+            currentCelsiusValue = round(currentCelsiusValue)
+            
+            //Add one to value and
+            var increasedValue = (currentCelsiusValue + Float(sign * 1))
+            
+            //Display Fahrenheit value
+            celsiusLabel.text = convertToStringValue(increasedValue)
+            
+            //Convert Celsius to Fahrenheit
+            var fahrenheitValue = convertCelsiusToFahrenheit(celsius: celsiusLabel.text!)
+            
+            //Display celsius value
+            fahrenheitLabel.text = convertToStringValue(fahrenheitValue)
+        }
+    }
     
     
     //MARK: Change UIImageView Background Color
     //TODO
-
+    
+    
+    
+    
 }
 
 extension String {
