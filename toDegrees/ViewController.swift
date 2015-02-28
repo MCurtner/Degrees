@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import iAd
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ADBannerViewDelegate {
+    
+    var bannerView:ADBannerView?
     
     var celsiusImageView = UIImageView()
     var fahrenheitImageView = UIImageView()
@@ -73,6 +76,11 @@ class ViewController: UIViewController {
         let panCelsiusUp = UIPanGestureRecognizer(target: self, action: panCelsiusGesture)
         celsiusImageView.addGestureRecognizer(panCelsiusUp)
         
+        
+        //iAd
+        self.canDisplayBannerAds = true
+        self.bannerView?.delegate = self
+        self.bannerView?.hidden = true
     }
     
     
@@ -193,11 +201,29 @@ class ViewController: UIViewController {
     
     func setCelsiusTempBackgroundColor(#temperature: CGFloat) -> UIColor {
         var num = (-temperature + 110) / 255.0
-        println(num)
         var backgroundColor: UIColor = UIColor(hue: num + num, saturation: 1.0, brightness: 1.0, alpha: 1.0)
 
         return backgroundColor
     }
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func bannerViewDidLoadAd(banner: ADBannerView!) {
+        self.bannerView?.hidden = false
+    }
+    
+    func bannerViewActionShouldBegin(banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
+        return willLeave
+    }
+    
+    func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
+        self.bannerView?.hidden = true
+    }
+    
     
 }
 
